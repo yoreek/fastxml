@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fastxml
+    $ gem install fast-xml
 
 ## Release Notes
 

@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fastxml/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'fastxml'
+  spec.name          = 'fast-xml'
   spec.version       = FastXML::VERSION
   spec.authors       = ['Yuriy Ustushenko']
   spec.email         = ['yoreek@yahoo.com']
