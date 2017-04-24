@@ -9,7 +9,7 @@ Fast Ruby Hash to XML and XML to Ruby Hash converter written in pure C.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fastxml'
+gem 'fast-xml'
 ```
 
 And then execute:
