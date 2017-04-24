@@ -1,0 +1,20 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+.rbenv-version
+.ruby-version
+.rubocop.yml
+*.so
+*.o
+*.log
+Makefile
+extconf.h
+
+# rspec failure tracking
+.rspec_status
