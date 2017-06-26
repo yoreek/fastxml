@@ -96,14 +96,6 @@ xh_parse_arg(VALUE key, VALUE value, VALUE ctx)
     keylen = RSTRING_LEN(key);
 
     switch (keylen) {
-        case 2:
-            if (xh_str_equal2(keyptr, 'c', 'b')) {
-                VALUE v = rb_inspect(value);
-                rb_warn("cb: %s\n", StringValueCStr(v));
-                opts->cb = xh_param_assign_cb(value);
-                break;
-            }
-            goto error;
 #ifdef XH_HAVE_DOM
         case 3:
             if (xh_str_equal3(keyptr, 'd', 'o', 'c')) {
@@ -278,6 +270,8 @@ xh_parse_args(xh_opts_t *opts, xh_int_t *nparam, xh_int_t argc, VALUE *argv)
     (*nparam)++;
 
     rb_hash_foreach(hash, xh_parse_arg, (VALUE) opts);
+
+    opts->block_given = xh_param_assign_block();
 }
 
 void *
@@ -314,6 +308,23 @@ xh_get_hash_param(xh_int_t *nparam, xh_int_t argc, VALUE *argv)
     param = argv[*nparam];
     if (rb_cHash != rb_obj_class(param))
         rb_raise(rb_eArgError, "Parameter is not a hash");
+
+    (*nparam)++;
+
+    return param;
+}
+
+VALUE
+xh_get_str_param(xh_int_t *nparam, xh_int_t argc, VALUE *argv)
+{
+    VALUE param;
+
+    if (*nparam >= argc)
+        rb_raise(rb_eArgError, "Invalid parameters");
+
+    param = argv[*nparam];
+    if (!RB_TYPE_P(param, RUBY_T_STRING))
+        rb_raise(rb_eArgError, "Parameter is not a string");
 
     (*nparam)++;
 

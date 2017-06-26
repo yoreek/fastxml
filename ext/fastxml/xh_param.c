@@ -62,16 +62,8 @@ xh_param_assign_filter(xh_pattern_t *patt, VALUE value)
     }
 }
 
-VALUE
-xh_param_assign_cb(VALUE value)
+xh_bool_t
+xh_param_assign_block(void)
 {
-    if ( !RTEST(value) )
-        return Qnil;
-
-    if (rb_cProc != rb_class_of(value) && rb_cMethod != rb_class_of(value))
-      rb_raise(rb_eArgError, "Expected Proc or Method callback");
-
-    //rb_funcall(value, rb_intern("call"), 0);
-
-    return value;
+    return rb_block_given_p() ? TRUE : FALSE;
 }

@@ -14,25 +14,35 @@ typedef enum {
     XH_LOG_TRACE
 } xh_log_level_t;
 
+#if __STDC_VERSION__ < 199901L
+# if __GNUC__ >= 2
+#  define XH_CURRENT_FUNCTION __FUNCTION__
+# else
+#  define XH_CURRENT_FUNCTION "<unknown>"
+# endif
+#else
+# define XH_CURRENT_FUNCTION __func__
+#endif
+
 #ifdef WITH_TRACE
 #define xh_log_debug0(msg)                                                 \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg)
 #define xh_log_debug1(msg, arg1)                                           \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1)
 #define xh_log_debug2(msg, arg1, arg2)                                     \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2)
 #define xh_log_debug3(msg, arg1, arg2, arg3)                               \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3)
 #define xh_log_debug4(msg, arg1, arg2, arg3, arg4)                         \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4)
 #define xh_log_debug5(msg, arg1, arg2, arg3, arg4, arg5)                   \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5)
 #define xh_log_debug6(msg, arg1, arg2, arg3, arg4, arg5, arg6)             \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6)
 #define xh_log_debug7(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)       \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 #define xh_log_debug8(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) \
-        xh_log(XH_LOG_DEBUG, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+        xh_log(XH_LOG_DEBUG, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 #else
 #define xh_log_debug0(msg)
 #define xh_log_debug1(msg, arg1)
@@ -47,23 +57,23 @@ typedef enum {
 
 #ifdef WITH_TRACE
 #define xh_log_trace0(msg)                                                 \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg)
 #define xh_log_trace1(msg, arg1)                                           \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1)
 #define xh_log_trace2(msg, arg1, arg2)                                     \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2)
 #define xh_log_trace3(msg, arg1, arg2, arg3)                               \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3)
 #define xh_log_trace4(msg, arg1, arg2, arg3, arg4)                         \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4)
 #define xh_log_trace5(msg, arg1, arg2, arg3, arg4, arg5)                   \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5)
 #define xh_log_trace6(msg, arg1, arg2, arg3, arg4, arg5, arg6)             \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6)
 #define xh_log_trace7(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)       \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 #define xh_log_trace8(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) \
-        xh_log(XH_LOG_TRACE, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+        xh_log(XH_LOG_TRACE, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 #else
 #define xh_log_trace0(msg)
 #define xh_log_trace1(msg, arg1)
@@ -77,23 +87,23 @@ typedef enum {
 #endif
 
 #define xh_log_error0(msg)                                                 \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg)
 #define xh_log_error1(msg, arg1)                                           \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1)
 #define xh_log_error2(msg, arg1, arg2)                                     \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2)
 #define xh_log_error3(msg, arg1, arg2, arg3)                               \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3)
 #define xh_log_error4(msg, arg1, arg2, arg3, arg4)                         \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4)
 #define xh_log_error5(msg, arg1, arg2, arg3, arg4, arg5)                   \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5)
 #define xh_log_error6(msg, arg1, arg2, arg3, arg4, arg5, arg6)             \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6)
 #define xh_log_error7(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)       \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 #define xh_log_error8(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) \
-        xh_log(XH_LOG_ERROR, __FUNCTION__, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+        xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 
 void xh_log(xh_log_level_t log_level, const char *func, xh_int_t line, const char *msg, ...);
 

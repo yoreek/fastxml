@@ -2,6 +2,8 @@
 #define _XH_CONFIG_H_
 
 #include "ruby.h"
+#include "ruby/io.h"
+#include "ruby/re.h"
 #if HAVE_RUBY_ENCODING_H
 #include "ruby/encoding.h"
 #endif
@@ -70,5 +72,6 @@ typedef u_char    xh_char_t;
 extern VALUE xh_module;
 extern VALUE xh_parse_error_class;
 extern ID    xh_id_next;
+extern ID    xh_id_initialize;
 
 #endif /* _XH_CONFIG_H_ */

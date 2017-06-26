@@ -8,12 +8,19 @@ void Init_fastxml();
 VALUE xh_module;
 VALUE xh_parse_error_class;
 ID    xh_id_next;
+ID    xh_id_initialize;
 
 typedef struct {
     int           argc;
     VALUE        *argv;
     xh_h2x_ctx_t *ctx;
 } xh_h2x_arg_t;
+
+typedef struct {
+    int           argc;
+    VALUE        *argv;
+    xh_x2h_ctx_t *ctx;
+} xh_x2h_arg_t;
 
 static VALUE
 hash2xml_exec(VALUE a) {
@@ -50,10 +57,35 @@ hash2xml(int argc, VALUE *argv, VALUE self) {
 }
 
 static VALUE
-xml2hash(int argc, VALUE *argv, VALUE self) {
-    VALUE obj = Qnil;
+xml2hash_exec(VALUE a) {
+    xh_x2h_arg_t *arg = (xh_x2h_arg_t *) a;
 
-    return obj;
+    xh_x2h_init_ctx(arg->ctx, arg->argc, arg->argv);
+
+    return xh_x2h(arg->ctx);
+}
+
+static VALUE
+xml2hash(int argc, VALUE *argv, VALUE self) {
+    xh_x2h_ctx_t  ctx;
+    VALUE         result;
+    int           state;
+    xh_x2h_arg_t  arg;
+
+    arg.argc = argc;
+    arg.argv = argv;
+    arg.ctx  = &ctx;
+
+    result = rb_protect(xml2hash_exec, (VALUE) &arg, &state);
+
+    if (state) {
+        xh_x2h_destroy_ctx(&ctx);
+        rb_exc_raise(rb_errinfo());
+    }
+
+    xh_x2h_destroy_ctx(&ctx);
+
+    return result;
 }
 
 void Init_fastxml(void) {
@@ -64,4 +96,5 @@ void Init_fastxml(void) {
     rb_define_module_function(xh_module, "xml2hash", xml2hash, -1);
 
     xh_id_next = rb_intern("next");
+    xh_id_initialize = rb_intern("initialize");
 }

@@ -26,10 +26,11 @@ See [CHANGELOG.md](CHANGELOG.md)
 
 ## Usage
 
+### Convert hash toXML
+
 ```ruby
 require 'fastxml'
 
-# convert hash to XML
 FastXML.hash2xml({ tag1: { tag2: 'content' } }, indent: 2)
 # =>
 # <?xml version="1.0" encoding="utf-8"?>
@@ -60,82 +61,190 @@ fh.string
 #   <enumerator>1</enumerator>
 #   <enumerator>2</enumerator>
 # </root>
+```
 
+### Convert XML to hash
+
+```ruby
+FastXML.xml2hash('<root><a>aaa</a><a>aaa2</a><b attr="bbb">bbb2</b></root>')
+# => {"a"=>["aaa", "aaa2"], "b"=>{"attr"=>"bbb", "content"=>"bbb2"}}
+
+# use filter
+FastXML.xml2hash('<root><a>aaa</a><a>aaa2</a><b>bbb</b></root>', filter: '/root/a') do |node|
+  p node
+end
+# =>
+# {"a"=>"aaa"}
+# {"a"=>"aaa2"}
 ```
 
 ## Options
 
 The following options are available to pass to FastXML.hash2xml(hash, options = {}).
 
-* **:root** => 'root'
+* **:root => 'root' # hash2xml**
   * Root node name.
 
-* **:version** => '1.0'
+* **:version => '1.0' # hash2xml**
   * XML document version
 
-* **:encoding** => 'utf-8'
+* **:encoding => 'utf-8' # hash2xml + xml2hash**
   * XML input/output encoding
 
-* **:indent** => 0
-  * if indent great than "0", XML output should be indented according to
+* **:indent => 0 # hash2xml**
+  * if indent great than **0**, XML output should be indented according to
     its hierarchic structure. This value determines the number of
     spaces.
 
-  * if indent is "0", XML output will all be on one line.
+  * if indent is **0**, XML output will all be on one line.
 
-* **:output** => nil
+* **:output => nil # hash2xml**
   * XML output method
 
-  * if output is nil, XML document dumped into string.
+  * if output is **nil**, XML document dumped into string.
 
   * if output is filehandle, XML document writes directly to a filehandle or a
     stream.
 
-* **:canonical** => false
-  * if canonical is "true", converter will be write hashes sorted by key.
+* **:canonical => false # hash2xml**
+  * if canonical is **true**, the converter will be write hashes sorted by key.
 
-  * if canonical is "false", order of the element will be pseudo-randomly.
+  * if canonical is **false**, the order of the element will be pseudo-randomly.
 
-* **:use_attr** => false
-  * if use_attr is "true", converter will be use the attributes.
+* **:use_attr => false # hash2xml**
+  * if use_attr is **true**, the converter will be use the attributes.
 
-  * if use_attr is "fale", converter will be use tags only.
+  * if use_attr is **fale**, the converter will be use tags only.
 
-* **:content** => nil
-  * if defined that the key name for the text content(used only if
-    use_attr = true).
+* **:content => 'content' # hash2xml + xml2hash**
+  * The key name for the text content.
 
-* **:force_array** => nil
-  * This option is similar to "ForceArray" from [XMl::Simple module]:
-    (https://metacpan.org/pod/XML::Simple#ForceArray-1-in---important).
+* **:force_array => nil # xml2hash**
+  * When this option is **true**, the converter will be to force nested elements
+    to be represented as arrays even when there is only one.
 
-* **:force_content** => nil
-  * This option is similar to "ForceContent" from [XMl::Simple module]:
-    (https://metacpan.org/pod/XML::Simple#ForceContent-1-in---seldom-used).
+    ```FastXML.xml2hash('<root><a>aaa</a></root>', force_array: true)```
 
-* **:merge_text** => false
-  * Setting this option to "true" will cause merge adjacent text nodes.
+    will be converted to:
 
-* **:xml_decl** => true
-  * if xml_decl is "true", output will start with the XML declaration
-    '<?xml version="1.0" encoding="utf-8"?>'.
+    ```{ "a" => ["aaa"] }```
 
-  * if xml_decl is "false", XML declaration will not be output.
+    instead of:
 
-* **:trim** => false
+    ```{ "a" => "aaa" }```
+
+  * When this option is an array, this allows to specify a list of element
+    names which should always be forced into an array representation,
+    rather than the 'all or nothing' approach above.
+
+    ```FastXML.xml2hash('<root><a>aaa</a><b>bbb</b></root>', force_array: ['a'])```
+
+    will be converted to:
+
+    ```{ "a" => ["aaa"], "b" => "bbb" }```
+
+    ```FastXML.xml2hash('<root><a>aaa</a><a2>aaa</a2><b>bbb</b></root>', force_array: [/^a/])```
+
+    will be converted to:
+
+    ```{ "a" => ["aaa"], "a2" => ["aaa"], "b" => "bbb" }```
+
+* **:force_content => false # xml2hash**
+  * When this options is **true**, this allows you to force text content to always
+    convert to a hash value.
+
+    ```FastXML.xml2hash('<root><a>value</a></root>', force_content: true)```
+
+    will be converted to:
+
+    ```{ "a" => { "content" => "value" } }```
+
+    instead of:
+
+    ```{ "a" => "value" }```
+
+* **:merge_text => false # xml2hash**
+  * Setting this option to **true** will cause merge adjacent text nodes.
+
+    ```FastXML.xml2hash('<root>value1<!-- comment -->value2</root>', merge_text: true)```
+
+    will be converted to:
+
+    ```"value1value2"```
+
+    instead of:
+
+    ```["value1", "value2"]```
+
+* **:xml_decl => true # hash2xml**
+  * if xml_decl is **true**, output will start with the XML declaration
+    ```<?xml version="1.0" encoding="utf-8"?>```
+
+  * if xml_decl is **false**, XML declaration will not be output.
+
+* **:trim => false # hash2xml + xml2hash**
   * Trim leading and trailing whitespace from text nodes.
 
-* **:utf8** => true
-  * Turn on utf8 flag for strings if enabled.
+* **:utf8 => true # hash2xml + xml2hash**
+  * Turn on utf8 flag for strings if is **true**.
 
-* **:max_depth** => 1024
+* **:max_depth => 1024 # xml2hash**
   * Maximum recursion depth.
 
-* **:buf_size** => 4096
+* **:buf_size => 4096 # hash2xml + xml2hash**
   * Buffer size for reading end encoding data.
 
-* **:keep_root** => false
+* **:keep_root => false # xml2hash**
   * Keep root element.
+
+    ```FastXML.xml2hash('<root>value1</root>', keep_root: true)```
+
+    will be converted to:
+
+    ```{ "root" => "value1" }```
+
+    instead of:
+
+    ```"value1"```
+
+* **:filter => nil # xml2hash**
+  * Filter nodes matched by pattern and return an array of nodes.
+
+    ```FastXML.xml2hash('<root><a>aaa</a><a>aaa2</a><b>bbb</b></root>', filter: '/root/a')```
+
+    will be converted to:
+
+    ```[{ "a" => "aaa" }, { "a" => "aaa2" }]```
+
+    ```FastXML.xml2hash('<root><a>aaa</a><a>aaa2</a><b>bbb</b></root>', filter: /a|b/)```
+
+    will be converted to:
+
+    ```[{ "a" => "aaa" }, { "a" => "aaa2" }, { "b" => "bbb" }]```
+
+    ```FastXML.xml2hash('<root><a>aaa</a><a>aaa2</a><b>bbb</b></root>', filter: ['/root/a', '/root/b'])```
+
+    will be converted to:
+
+    ```[{ "a" => "aaa" }, { "a" => "aaa2" }, { "b" => "bbb" }]```
+
+  * You can pass a block as parameter.
+
+    ```
+    FastXML.xml2hash('<root><a>aaa</a><a>aaa2</a><b>bbb</b></root>', filter: '/root/a') do |node|
+      p node
+    end
+    ```
+
+    will be printed:
+
+    ```
+    {"a"=>"aaa"}
+    {"a"=>"aaa2"}
+    ```
+
+    It may be used to parse large XML because does not require a lot of
+    memory.
 
 ## Configuration
 ```
@@ -161,4 +270,3 @@ fastxml                  0.010000   0.000000   0.010000 (  0.018434)
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
