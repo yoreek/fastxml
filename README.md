@@ -78,6 +78,7 @@ end
 # {"a"=>"aaa2"}
 ```
 
+
 ## Options
 
 The following options are available to pass to FastXML.hash2xml(hash, options = {}).
