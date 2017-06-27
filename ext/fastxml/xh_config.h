@@ -2,6 +2,7 @@
 #define _XH_CONFIG_H_
 
 #include "ruby.h"
+#include "ruby/version.h"
 #include "ruby/io.h"
 #include "ruby/re.h"
 #if HAVE_RUBY_ENCODING_H
@@ -21,14 +22,31 @@
 #include <sys/mman.h>
 #endif
 
-#if __GNUC__ >= 3
-# define expect(expr,value)         __builtin_expect ((expr), (value))
-# define XH_INLINE                  static inline
-# define XH_UNUSED(v)               x __attribute__((unused))
+#if defined __GNUC__
+# if __GNUC__ >= 3
+#   define expect(expr,value)         __builtin_expect ((expr), (value))
+#   define XH_INLINE                  static inline
+#   define XH_UNUSED(v)               x __attribute__((unused))
+# else
+#   define expect(expr,value)         (expr)
+#   define XH_INLINE                  static
+#   define XH_UNUSED(v)               v
+# endif
+#endif
+
+#if defined __GNUC__
+# if (__GNUC__ < 4) || defined(__GNUC_MINOR__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 4)
+     /* gcc versions before 4.4.x don't support gnu_printf, so use printf. */
+#   define XH_GCC_ATTR __attribute__((__unused__, format(printf, 1, 2)))
+#   define XH_GCC_FMT_ATTR(n, m) __attribute__((format(printf, n, m)))
+# else
+    /* Use gnu_printf when supported (qemu uses standard format strings). */
+#   define XH_GCC_ATTR __attribute__((__unused__, format(gnu_printf, 1, 2)))
+#   define XH_GCC_FMT_ATTR(n, m) __attribute__((format(gnu_printf, n, m)))
+# endif
 #else
-# define expect(expr,value)         (expr)
-# define XH_INLINE                  static
-# define XH_UNUSED(v)               v
+# define XH_GCC_ATTR /**/
+# define XH_GCC_FMT_ATTR(n, m)
 #endif
 
 #ifdef _MSC_VER

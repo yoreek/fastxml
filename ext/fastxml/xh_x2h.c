@@ -14,7 +14,7 @@ static const char DEF_CONTENT_KEY[] = "content";
     rb_str_cat((v), (const char *) (s), (l));
 
 #define SAVE_VALUE(lv, v , s, l)                                        \
-    xh_log_trace2("save value: [%.*s]", l, s);                          \
+    xh_log_trace2("save value: [%.*s]", (int) (l), s);                  \
     if ( RTEST(v) ) {                                                   \
         xh_log_trace0("add to array");                                  \
         /* get array if value is reference to array */                  \
@@ -64,7 +64,7 @@ static const char DEF_CONTENT_KEY[] = "content";
     (s) = NULL;
 
 #define OPEN_TAG(s, l)                                                  \
-    xh_log_trace2("new tag: [%.*s]", l, s);                             \
+    xh_log_trace2("new tag: [%.*s]", (int) (l), s);                     \
     if (real_depth == 0) {                                              \
         if (flags & XH_X2H_ROOT_FOUND) goto INVALID_XML;                \
         flags |= XH_X2H_ROOT_FOUND;                                     \
@@ -72,7 +72,7 @@ static const char DEF_CONTENT_KEY[] = "content";
     if (XH_X2H_FILTER_SEARCH(flags)) {                                  \
         xh_x2h_xpath_update(ctx->xpath, s, l);                          \
         if (xh_x2h_match_node(ctx->xpath, xh_strlen(ctx->xpath), ctx->opts.filter.expr)) {\
-            xh_log_trace2("match node: [%.*s]", l, s);                  \
+            xh_log_trace2("match node: [%.*s]", (int) (l), s);          \
             ctx->hash = hash_new();                                     \
             nodes[0].lval = lval = &ctx->hash;                          \
             depth = 0;                                                  \
@@ -132,7 +132,7 @@ static const char DEF_CONTENT_KEY[] = "content";
     }
 
 #define NEW_XML_DECL_ATTRIBUTE(k, kl, v, vl)                            \
-    xh_log_trace4("new xml decl attr name: [%.*s] value: [%.*s]", kl, k, vl, v);\
+    xh_log_trace4("new xml decl attr name: [%.*s] value: [%.*s]", (int) (kl), k, (int) (vl), v);\
     /* save encoding parameter to converter context if param found */   \
     if ((kl) == (sizeof("encoding") - 1) &&                             \
         xh_strncmp((k), XH_CHAR_CAST "encoding", sizeof("encoding") - 1) == 0) {\
@@ -176,7 +176,7 @@ static const char DEF_CONTENT_KEY[] = "content";
     }                                                                   \
 
 #define NEW_TEXT(s, l)                                                  \
-    xh_log_trace2("new text: [%.*s]", l, s);                            \
+    xh_log_trace2("new text: [%.*s]", (int) (l), s);                    \
     if (real_depth == 0) goto INVALID_XML;                              \
     if (!XH_X2H_FILTER_SEARCH(flags)) {                                 \
         _NEW_TEXT(s, l)                                                 \
@@ -349,7 +349,7 @@ XH_PPCAT(loop, _SEARCH_ATTRIBUTES_LOOP):                                \
             DO(XH_PPCAT(loop, _PARSE_ATTR_NAME))                        \
                 EXPECT_BLANK("end attr name")                           \
                     end = cur - 1;                                      \
-                    xh_log_trace2("attr name: [%.*s]", end - node, node);\
+                    xh_log_trace2("attr name: [%.*s]", (int) (end - node), node);\
                                                                         \
                     DO(XH_PPCAT(loop, _ATTR_SKIP_BLANK))                \
                         EXPECT_CHAR("search attr value", '=')           \
@@ -361,7 +361,7 @@ XH_PPCAT(loop, _SEARCH_ATTRIBUTES_LOOP):                                \
                     goto INVALID_XML;                                   \
                 EXPECT_CHAR("end attr name", '=')                       \
                     end = cur - 1;                                      \
-                    xh_log_trace2("attr name: [%.*s]", end - node, node);\
+                    xh_log_trace2("attr name: [%.*s]", (int) (end - node), node);\
                                                                         \
 XH_PPCAT(loop, _SEARCH_ATTRIBUTE_VALUE):                                \
                     DO(XH_PPCAT(loop, _PARSE_ATTR_VALUE))               \
@@ -571,7 +571,7 @@ XH_PPCAT(loop, _SEARCH_ATTRIBUTE_VALUE):                                \
     END(XH_PPCAT(loop, _REFERENCE))                                     \
     goto INVALID_REF;                                                   \
 XH_PPCAT(loop, _REFEFENCE_VALUE):                                       \
-    xh_log_trace1("parse reference value: %lu", code);                  \
+    xh_log_trace1("parse reference value: %u", code);                   \
     if (code == 0 || code > 0x10FFFF) goto INVALID_REF;                 \
     if (code >= 0x80) {                                                 \
         if (code < 0x800) {                                             \
@@ -676,7 +676,7 @@ xh_x2h_match_node(xh_char_t *name, size_t name_len, VALUE expr)
     xh_char_t *expr_str;
     size_t     expr_len;
 
-    xh_log_trace2("match node: [%.*s]", name_len, name);
+    xh_log_trace2("match node: [%.*s]", (int) name_len, name);
 
     str = _NEW_STRING(name, name_len, TRUE);
 
@@ -703,7 +703,7 @@ xh_x2h_match_node(xh_char_t *name, size_t name_len, VALUE expr)
         xh_log_trace0("match string");
         expr_str = XH_CHAR_CAST RSTRING_PTR(expr);
         expr_len = RSTRING_LEN(expr);
-        xh_log_trace2("expr: [%.*s]", expr_len, expr_str);
+        xh_log_trace2("expr: [%.*s]", (int) expr_len, expr_str);
         if (name_len == expr_len && !xh_strncmp(name, expr_str, name_len)) {
             xh_log_trace0("match TRUE");
             return TRUE;
@@ -935,10 +935,10 @@ xh_x2h_parse(xh_x2h_ctx_t *ctx, xh_reader_t *reader)
             if (ctx->end     != NULL) ctx->end     -= off;
         }
 
-        xh_log_trace2("read buf: %.*s", len, buf);
+        xh_log_trace2("read buf: %.*s", (int) len, buf);
 
         do {
-            xh_log_trace2("parse buf: %.*s", len, buf);
+            xh_log_trace2("parse buf: %.*s", (int) len, buf);
 
             xh_x2h_parse_chunk(ctx, &buf, &len, eof);
 

@@ -105,6 +105,6 @@ typedef enum {
 #define xh_log_error8(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) \
         xh_log(XH_LOG_ERROR, XH_CURRENT_FUNCTION, __LINE__, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 
-void xh_log(xh_log_level_t log_level, const char *func, xh_int_t line, const char *msg, ...);
+void xh_log(xh_log_level_t log_level, const char *func, xh_int_t line, const char *msg, ...) XH_GCC_FMT_ATTR(4, 5);
 
 #endif /* _XH_LOG_H_ */
