@@ -256,16 +256,25 @@ The following options are available to pass to FastXML.hash2xml(hash, options = 
 
 ## Benchmarks
 
-Performance benchmark in comparison with some popular gems:
+Performance [benchmark](benchmark/benchmark.rb) in comparison with some popular gems:
 
 ```
 Converting Hash to XML:
                            user     system      total        real
-activesupport(rexml)    11.020000   0.000000  11.020000 ( 11.058084)
-activesupport(libxml)   10.690000   0.000000  10.690000 ( 10.731521)
-activesupport(nokogiri) 10.730000   0.010000  10.740000 ( 10.769866)
-xmlsimple                1.470000   0.000000   1.470000 (  1.477457)
-fastxml                  0.010000   0.000000   0.010000 (  0.018434)
+activesupport(rexml)    10.920000   0.010000  10.930000 ( 10.948205)
+activesupport(libxml)   10.880000   0.000000  10.880000 ( 10.910649)
+activesupport(nokogiri) 10.880000   0.000000  10.880000 ( 10.899013)
+xmlsimple                1.490000   0.000000   1.490000 (  1.504655)
+fastxml                  0.020000   0.000000   0.020000 (  0.018095)
+Converting XML to Hash:
+                 user     system      total        real
+activesupport(rexml)     8.420000   0.000000   8.420000 (  8.441763)
+activesupport(libxml)    1.110000   0.010000   1.120000 (  1.109242)
+activesupport(nokogiri)  1.660000   0.000000   1.660000 (  1.666208)
+xmlsimple                8.390000   0.010000   8.400000 (  8.427240)
+nori                     2.010000   0.000000   2.010000 (  2.016399)
+xmlhasher                0.440000   0.000000   0.440000 (  0.433211)
+fastxml                  0.070000   0.000000   0.070000 (  0.073124)
 ```
 
 ## License

@@ -1,4 +1,6 @@
-$:.push File.expand_path('../../lib', __FILE__)
+#!/usr/bin/env ruby
+
+$LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
 require 'benchmark'
 require 'fastxml'
@@ -62,7 +64,6 @@ Benchmark.bm 20 do |x|
     runs.times { FastXML.hash2xml(hash) }
   end
 end
-exit
 
 puts 'Converting XML to Hash:'
 runs = 100
@@ -92,5 +93,9 @@ Benchmark.bm 10 do |x|
 
   x.report 'xmlhasher              ' do
     runs.times { XmlHasher.parse(xml) }
+  end
+
+  x.report 'fastxml                ' do
+    runs.times { FastXML.xml2hash(xml) }
   end
 end
