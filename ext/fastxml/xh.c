@@ -232,16 +232,19 @@ xh_parse_arg(VALUE key, VALUE value, VALUE ctx)
                 opts->merge_text = xh_param_assign_bool(value);
                 break;
             }
+            goto error;
         case 11:
             if (xh_str_equal11(keyptr, 'f', 'o', 'r', 'c', 'e', '_', 'a', 'r', 'r', 'a', 'y')) {
                 xh_param_assign_pattern(&opts->force_array, value);
                 break;
             }
+            goto error;
         case 13:
             if (xh_str_equal13(keyptr, 'f', 'o', 'r', 'c', 'e', '_', 'c', 'o', 'n', 't', 'e', 'n', 't')) {
                 opts->force_content = xh_param_assign_bool(value);
                 break;
             }
+            goto error;
         default:
             goto error;
     }

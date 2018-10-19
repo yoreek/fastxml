@@ -1,7 +1,5 @@
 require_relative '../spec_helper'
 
-XML_DECL = %{<?xml version="1.0" encoding="utf-8"?>}
-
 RSpec.describe FastXML do
   def conv_to_io(hash)
     fh = StringIO.new

@@ -1,3 +1,7 @@
+## 1.1.3 - 2018-10-19
+
+  - Add support for Ruby 2.5.
+
 ## 1.1.2 - 2017-06-28
 
   - Update benchmarks.

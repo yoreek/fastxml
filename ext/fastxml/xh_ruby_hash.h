@@ -4,11 +4,15 @@
 #include "xh_config.h"
 #include "xh_core.h"
 #if RUBY_API_VERSION_MAJOR == 2 && RUBY_API_VERSION_MINOR == 2
-#include "ruby-2.2.7/xh_ruby_st.h"
+    #include "ruby-2.2.7/xh_ruby_st.h"
 #elif RUBY_API_VERSION_MAJOR == 2 && RUBY_API_VERSION_MINOR == 3
-#include "ruby-2.3.4/xh_ruby_st.h"
+    #include "ruby-2.3.4/xh_ruby_st.h"
 #elif RUBY_API_VERSION_MAJOR == 2 && RUBY_API_VERSION_MINOR == 4
-#include "ruby-2.4.1/xh_ruby_st.h"
+    #include "ruby-2.4.5/xh_ruby_st.h"
+#elif RUBY_API_VERSION_MAJOR == 2 && RUBY_API_VERSION_MINOR == 5
+    #include "ruby-2.5.1/xh_ruby_st.h"
+#else
+    #error "unsupported version of ruby"
 #endif
 
 static VALUE *
